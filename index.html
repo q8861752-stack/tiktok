@@ -7,17 +7,56 @@
 
 <script>
 !function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  w.TiktokAnalyticsObject = t;
+  var ttq = w[t] = w[t] || [];
+  ttq.methods = [
+    "page","track","identify","instances","debug","on","off","once","ready",
+    "alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"
+  ];
+  ttq.setAndDefer = function(t, e) {
+    t[e] = function() {
+      t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+    };
+  };
+  for (var i = 0; i < ttq.methods.length; i++) {
+    ttq.setAndDefer(ttq, ttq.methods[i]);
+  }
+  ttq.instance = function(t) {
+    var e = ttq._i[t] || [];
+    for (var n = 0; n < ttq.methods.length; n++) {
+      ttq.setAndDefer(e, ttq.methods[n]);
+    }
+    return e;
+  };
+  ttq.load = function(e, n) {
+    var r = "https://analytics.tiktok.com/i18n/pixel/events.js",
+        o = n && n.partner;
+    ttq._i = ttq._i || {};
+    ttq._i[e] = [];
+    ttq._i[e]._u = r;
+    ttq._t = ttq._t || {};
+    ttq._t[e] = +new Date;
+    ttq._o = ttq._o || {};
+    ttq._o[e] = n || {};
+    n = document.createElement("script");
+    n.type = "text/javascript";
+    n.async = true;
+    n.src = r + "?sdkid=" + e + "&lib=" + t;
+    e = document.getElementsByTagName("script")[0];
+    e.parentNode.insertBefore(n, e);
+  };
 
   ttq.load('D6T7UORC77U3AVTJ657G');
   ttq.page();
-
-  // ▼【ページを開いた時の計測】警告が出ないようにシンプル化
   ttq.track('ViewContent');
 }(window, document, 'ttq');
 </script>
+
+<noscript>
+  <img height="1" width="1" style="display:none"
+       src="https://analytics.tiktok.com/i18n/pixel/ping?sdkid=D6T7UORC77U3AVTJ657G&event=PageView&noscript=1"/>
+</noscript>
+
 <style>
 html {
     scroll-behavior: smooth;
@@ -257,7 +296,7 @@ footer a:hover {
             </p>
         </div>
 
-        <a class="line-btn" href="https://lin.ee/w5rGjnwx" id="lineBtn">
+        <a class="line-btn" href="https://lin.ee/w5rGjnwx" id="lineBtn" rel="noopener noreferrer">
             LINEで詳細を確認する
         </a>
 
@@ -290,19 +329,33 @@ footer a:hover {
 </div>
 
 <script>
-document.getElementById('lineBtn').addEventListener('click', function(e) {
-  e.preventDefault();
-  const url = this.href;
+document.addEventListener('DOMContentLoaded', function () {
+  var lineBtn = document.getElementById('lineBtn');
 
-  if (window.ttq) {
-    // ▼【ボタンを押した時の計測】間違いなく「お問い合わせ」が計測されます
-    ttq.track('Contact');
-  }
+  if (!lineBtn) return;
 
-  // 少し待ってからLINEへ移動（データ送信を確実に行うため）
-  setTimeout(function() {
-    window.location.href = url;
-  }, 800);
+  lineBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    var url = this.href;
+
+    try {
+      if (window.ttq) {
+        ttq.track('Contact', {
+          content_type: 'line_registration',
+          description: 'LINE button click'
+        });
+        console.log('TikTok Contact event sent');
+      } else {
+        console.log('TikTok ttq not found');
+      }
+    } catch (err) {
+      console.error('TikTok track error:', err);
+    }
+
+    setTimeout(function() {
+      window.location.href = url;
+    }, 1200);
+  });
 });
 </script>
 
