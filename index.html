@@ -29,13 +29,12 @@
     return e;
   };
   ttq.load = function(e, n) {
-    var r = "https://analytics.tiktok.com/i18n/pixel/events.js",
-        o = n && n.partner;
+    var r = "https://analytics.tiktok.com/i18n/pixel/events.js";
     ttq._i = ttq._i || {};
     ttq._i[e] = [];
     ttq._i[e]._u = r;
     ttq._t = ttq._t || {};
-    ttq._t[e] = +new Date;
+    ttq._t[e] = +new Date();
     ttq._o = ttq._o || {};
     ttq._o[e] = n || {};
     n = document.createElement("script");
@@ -48,14 +47,8 @@
 
   ttq.load('D6T7UORC77U3AVTJ657G');
   ttq.page();
-  ttq.track('ViewContent');
 }(window, document, 'ttq');
 </script>
-
-<noscript>
-  <img height="1" width="1" style="display:none"
-       src="https://analytics.tiktok.com/i18n/pixel/ping?sdkid=D6T7UORC77U3AVTJ657G&event=PageView&noscript=1"/>
-</noscript>
 
 <style>
 html {
@@ -296,7 +289,7 @@ footer a:hover {
             </p>
         </div>
 
-        <a class="line-btn" href="https://lin.ee/w5rGjnwx" id="lineBtn" rel="noopener noreferrer">
+        <a class="line-btn" href="https://lin.ee/hEoDVJ6" id="lineBtn">
             LINEで詳細を確認する
         </a>
 
@@ -329,33 +322,19 @@ footer a:hover {
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  var lineBtn = document.getElementById('lineBtn');
+document.getElementById('lineBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  const url = this.href;
 
-  if (!lineBtn) return;
+  if (window.ttq) {
+    ttq.track('Contact', {
+      content_name: 'LINE Add Friend'
+    });
+  }
 
-  lineBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    var url = this.href;
-
-    try {
-      if (window.ttq) {
-        ttq.track('Contact', {
-          content_type: 'line_registration',
-          description: 'LINE button click'
-        });
-        console.log('TikTok Contact event sent');
-      } else {
-        console.log('TikTok ttq not found');
-      }
-    } catch (err) {
-      console.error('TikTok track error:', err);
-    }
-
-    setTimeout(function() {
-      window.location.href = url;
-    }, 1200);
-  });
+  setTimeout(function() {
+    window.location.href = url;
+  }, 800);
 });
 </script>
 
