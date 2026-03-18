@@ -14,18 +14,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   ttq.load('D6T7UORC77U3AVTJ657G');
   ttq.page();
 
-  // ▼【追加】ページビュー時のイベント（ViewContent）
-  ttq.track('ViewContent', {
-    "contents": [
-        {
-            "content_id": "lp_main", 
-            "content_type": "product", 
-            "content_name": "LINE Secret Offer LP" 
-        }
-    ],
-    "value": 0, 
-    "currency": "JPY" 
-  });
+  // ▼【ページを開いた時の計測】警告が出ないようにシンプル化
+  ttq.track('ViewContent');
 }(window, document, 'ttq');
 </script>
 <style>
@@ -305,29 +295,11 @@ document.getElementById('lineBtn').addEventListener('click', function(e) {
   const url = this.href;
 
   if (window.ttq) {
-    // ▼【追加】PIIデータ（必要な場合はコメントアウト「/*」と「*/」を外して値を動的に入れてください）
-    /*
-    ttq.identify({
-        "email": "<hashed_email_address>",
-        "phone_number": "<hashed_phone_number>",
-        "external_id": "<hashed_external_id>"
-    });
-    */
-
-    // ▼【更新】ご提示のContactイベントコードに書き換え（日本のLINE登録向けに値を変えています）
-    ttq.track('Contact', {
-        "contents": [
-            {
-                "content_id": "line_add", 
-                "content_type": "product", 
-                "content_name": "LINE Add Friend" 
-            }
-        ],
-        "value": 0, 
-        "currency": "JPY" 
-    });
+    // ▼【ボタンを押した時の計測】間違いなく「お問い合わせ」が計測されます
+    ttq.track('Contact');
   }
 
+  // 少し待ってからLINEへ移動（データ送信を確実に行うため）
   setTimeout(function() {
     window.location.href = url;
   }, 800);
